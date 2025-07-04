@@ -1,0 +1,170 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Search Bar -->
+    <div class="container d-flex flex-column justify-content-center align-items-center py-5" style="min-height: 35vh;">
+        <h1 class="display-2 fw-bold mb-4 text-center glow">VocabVault</h1> <p class="lead text-center mb-5" style="font-family: var(--font-body);font-style: italic;">Your personal vault of words.</p> <form action="/search" method="POST" class="input-group search-bar-container"> <input autocomplete="off" autofocus name="word" class="form-control form-control-lg search-input" type="search" placeholder="Search a word..." required>
+            <button class="btn btn-lg btn-primary search-button" type="submit">
+                <i class="bi bi-search"></i> Search </button>
+        </form>
+    </div>
+
+    <!-- Word Result -->
+    {% if result %}
+    <div class="row justify-content-center mt-5"> <div class="col-md-9 col-lg-8"> <div class="card shadow-lg p-4 word-result-card"> <h2 class="mb-4 text-center">{{ result.word.title() }}</h2> 
+                {% set groups = {} %}
+                {% for d in result.meanings %}
+                    {% set _ = groups.setdefault(d.part_of_speech, []).append(d) %}
+                {% endfor %}
+
+                {% for pos, defs in groups.items() %}
+                    <div class="definition-section mb-4"> <h5 class="text-capitalize fw-bold mb-3">{{ pos }}</h5> 
+
+                        <ul class="list-unstyled definition-list"> {% for item in defs[:3] %}
+                                <li class="mb-3 pb-3 border-bottom-subtle">
+                                    <p class="definition-text mb-1">{{ item.definition }}</p>
+                                    {% if item.example %}
+                                        <p class="example-text text-muted small">"<em>{{ item.example }}</em>"</p>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        {% if defs|length > 3 %} {# Check if there are more than 3 #}
+
+                            <div class="collapse" id="moreDefs-{{ loop.index }}">
+                                <ul class="list-unstyled definition-list mt-3"> {% for item in defs[3:] %}
+                                        <li class="mb-3 pb-3 border-bottom-subtle">
+                                            <p class="definition-text mb-1">{{ item.definition }}</p>
+                                            {% if item.example %}
+                                                <p class="example-text text-muted small">"<em>{{ item.example }}</em>"</p>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <button class="btn btn-sm btn-outline-secondary mt-2 w-100 toggle-defs-btn" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#moreDefs-{{ loop.index }}"
+                                    aria-expanded="false" aria-controls="moreDefs-{{ loop.index }}">
+                                <span class="collapsed-text"><i class="bi bi-chevron-down me-2"></i> View More Definitions</span>
+                                <span class="expanded-text"><i class="bi bi-chevron-up me-2"></i> Show Less</span>
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <form method="POST" action="/save" class="mt-4 pt-4 border-top"> <input type="hidden" name="word" value="{{ result.word }}">
+                    <input type="hidden" name="definitions" value='{{ result.meanings | tojson }}'>
+                    <div class="mb-3">
+                        <label for="folder" class="form-label fw-bold">Save to folder:</label> <select class="form-select" name="folder_id" required>
+                            <option value="" disabled selected>Select folder</option>
+                            {% for folder in folders %}
+                                <option value="{{ folder.id }}">{{ folder.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Save Word</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Folders Section -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Your Folders</h3>
+        <!-- Add Folder Button -->
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addFolderModal">
+            <i class="bi bi-plus-lg"></i> Add Folder
+        </button>
+    </div>
+    
+    <!-- Folder Cards -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for folder in folders %}
+        <div class="col">
+            <div class="card shadow-sm position-relative h-100 folder-card"> <div class="position-absolute top-0 end-0 m-3 d-flex gap-2 folder-actions"> <button type="button" class="btn btn-icon" data-bs-toggle="modal" data-bs-target="#renameFolderModal{{ folder.id }}" title="Rename Folder">
+                        <i class="bi bi-pencil-fill"></i> </button>
+                    <form method="POST" action="/delete-folder/{{ folder.id }}" onsubmit="return confirm('Are you sure you want to delete this folder? This action cannot be undone.');" class="d-inline">
+                        <button type="submit" class="btn btn-icon delete-folder-btn" title="Delete Folder">
+                            <i class="bi bi-trash-fill"></i> </button>
+                    </form>
+                </div>
+    
+                <a href="/folder/{{ folder.id }}" class="text-decoration-none text-dark folder-link"> <div class="card-body d-flex flex-column justify-content-between"> <div>
+                            <h5 class="card-title mb-2">
+                                <i class="bi bi-folder-fill me-2 folder-icon"></i><span class="folder-name-text">{{ folder.name }}</span> </h5>
+                            <p class="card-text text-muted small mb-1">
+                                {% if folder.word_count == 0 %}
+                                    <span class="fw-bold">No</span> words
+                                {% else %}
+                                    <span class="fw-bold">{{ folder.word_count }}</span> word{{ folder.word_count != 1 and "s" or "" }}
+                                {% endif %}
+                            </p>
+                            <p class="card-text text-muted small">
+                                Created on: {{ folder.created_at.split(" ")[0] }}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% else %}
+            <p class="text-muted">No folders yet.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+<!-- Add Folder Modal -->
+<div class="modal fade" id="addFolderModal" tabindex="-1" aria-labelledby="addFolderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/add-folder" method="POST">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addFolderModalLabel">Create New Folder</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="folderName" class="form-label">Folder Name</label>
+              <input type="text" class="form-control" name="folder_name" id="folderName" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+<!-- Rename Folder Modals -->
+{% for folder in folders %}
+<div class="modal fade" id="renameFolderModal{{ folder.id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="/rename-folder/{{ folder.id }}">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Rename Folder</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="new_name" class="form-control" placeholder="New folder name" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Rename</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endfor %}
+  
+{% endblock %}

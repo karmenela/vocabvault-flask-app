@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Go Back
+        </a>
+    </div>
+
+    <h2>{{ folder.name }}</h2>
+    <p class="text-muted">Created on: {{ folder.created_at.split(" ")[0] }}</p>
+
+    {% if words %}
+        <div class="row row-cols-1 g-4 mt-3">
+            {% for word in words %}
+            <div class="col">
+                <div class="card shadow-sm position-relative word-entry-card"> {# <-- CORRECT OPENING CARD DIV #}
+                    <div class="card-body">
+                        <h5 class="card-title d-flex justify-content-between align-items-center mb-3">
+                            {{ word.word.title() }}
+                            <div class="d-flex align-items-center gap-2">
+                                <form method="POST" action="/delete-word/{{ word.id }}" onsubmit="return confirm('Are you sure you want to delete this word?');" class="d-inline">
+                                    <button type="submit" class="btn btn-icon delete-word-btn" title="Delete Word">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </form>
+                                <button class="btn btn-icon toggle-word-defs-btn collapsed" type="button" {# Added 'collapsed' class here for initial state #}
+                                        data-bs-toggle="collapse" data-bs-target="#wordDefs-{{ word.id }}"
+                                        aria-expanded="false" aria-controls="wordDefs-{{ word.id }}">
+                                    <i class="bi bi-chevron-down collapsed-icon"></i>
+                                    <i class="bi bi-chevron-up expanded-icon"></i>
+                                </button>
+                            </div>
+                        </h5>
+
+                        <div class="collapse" id="wordDefs-{{ word.id }}">
+                            <hr class="my-3"> {# Added HR for visual separation #}
+                            {% set grouped = {} %}
+                            {% for d in word.definitions %}
+                                {% set _ = grouped.setdefault(d.part_of_speech, []).append(d) %}
+                            {% endfor %}
+                        
+                            {% for pos, defs in grouped.items() %}
+                                <div class="definition-section mb-4">
+                                    <h6 class="text-capitalize fw-bold mb-3">{{ pos }}</h6>
+                                    <ul class="list-unstyled definition-list"> {# Changed to ul, added list-unstyled #}
+                                        {% for def in defs[:3] %} {# Show only first 3 #}
+                                            <li class="mb-3 pb-3 border-bottom-subtle">
+                                                <p class="definition-text mb-1">{{ def.definition }}</p>
+                                                {% if def.example %}
+                                                    <p class="example-text text-muted small"><em>"{{ def.example }}"</em></p>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    
+                                    {% if defs|length > 3 %}
+                                        <div class="collapse" id="moreDefs-{{ word.id }}-{{ loop.index }}">
+                                            <ul class="list-unstyled definition-list mt-3"> {# Changed to ul, added list-unstyled #}
+                                                {% for def in defs[3:] %} {# Show remaining #}
+                                                    <li class="mb-3 pb-3 border-bottom-subtle">
+                                                        <p class="definition-text mb-1">{{ def.definition }}</p>
+                                                        {% if def.example %}
+                                                            <p class="example-text text-muted small"><em>"{{ def.example }}"</em></p>
+                                                        {% endif %}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-secondary mt-2 w-100 toggle-defs-btn" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#moreDefs-{{ word.id }}-{{ loop.index }}"
+                                                aria-expanded="false" aria-controls="moreDefs-{{ word.id }}-{{ loop.index }}">
+                                            <span class="collapsed-text"><i class="bi bi-chevron-down me-2"></i> View More Definitions</span>
+                                            <span class="expanded-text"><i class="bi bi-chevron-up me-2"></i> Show Less</span>
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+
+                            <p class="card-text text-muted small mt-3 pt-3 border-top">
+                                Added on: {{ word.created_at.split(" ")[0] }}
+                            </p>
+                        </div> {# End of Primary Collapse Div #}
+                    </div> {# <-- CORRECT CLOSING CARD-BODY DIV #}
+                </div> {# <-- CORRECT CLOSING CARD DIV #}
+            </div> {# <-- CORRECT CLOSING COL DIV #}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted mt-4">No words saved in this folder yet.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

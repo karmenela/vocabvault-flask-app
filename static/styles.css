@@ -1,0 +1,752 @@
+:root {
+    /* Colors */
+    --primary-accent: #FFAB91; /* Soft Coral */
+    --secondary-accent: #B0C4DE; /* Gentle Periwinkle */
+    --bg-gradient-start: #F0F8FF; /* AliceBlue */
+    --bg-gradient-end: #FFF0F5; /* LavenderBlush */
+    --text-body: #333333; /* Soft Dark Grey */
+    --text-heading: #212121; /* Near Black */
+    --link-hover: #7E57C2; /* A slightly deeper purple for link hovers */
+
+    /* Fonts */
+    --font-heading: 'Lora', serif; /* Now Lora for headings */
+    --font-body: 'Inter', sans-serif; /* Now Inter for definitions/body text */
+    --font-ui: 'Inter', sans-serif;   /* Still Inter for general UI elements */
+
+    --text-primary-dark: #1a1a1a; /* Even darker for important headings */
+    --text-muted-dark: #555555;   /* Darker muted text for examples */
+    --border-subtle: #eeeeee;    /* Very light border for separators */
+
+    --alert-bg-color: #B0C4DE; /* A soft, light blue */
+    --alert-text-color: #2D6C8A; /* A darker, muted blue */
+    --alert-border-color: #A0D3E0; /* A border color slightly darker than background */
+    --alert-close-filter: invert(20%) sepia(100%) saturate(2000%) hue-rotate(180deg) brightness(80%) contrast(100%); /* Filter for close button icon */
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    background-attachment: fixed; /* Ensures the gradient covers the whole page even if content is short */
+    font-family: var(--font-ui); /* Default body font for general UI */
+    color: var(--text-body);
+    min-height: 100vh; /* Ensure body takes full viewport height for gradient */
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--text-heading);
+    letter-spacing: -0.02em; /* Slightly tighter letter spacing for modern look */
+}
+
+
+
+/* Base card styling */
+.card {
+    border: none;
+    border-radius: 1rem; /* Softer rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    transition: all 0.3s ease-in-out; /* Smooth transitions for hovers */
+    background-color: white; /* Explicitly white background */
+}
+
+.card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Slightly more pronounced shadow on hover */
+    transform: translateY(-2px); /* Subtle lift effect */
+}
+
+/* Bootstrap button overrides for our palette and rounded style */
+.btn {
+    border-radius: 0.75rem; /* More rounded, but not pill-shaped */
+    font-family: var(--font-ui);
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    padding: 0.75rem 1.5rem; /* More comfortable padding */
+}
+
+.btn-primary {
+    background-color: var(--secondary-accent);
+    border-color: var(--secondary-accent);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: color-mix(in srgb, var(--secondary-accent) 85%, black); /* Darken on hover */
+    border-color: color-mix(in srgb, var(--secondary-accent) 85%, black);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background-color: var(--primary-accent);
+    border-color: var(--primary-accent);
+    color: white;
+}
+.btn-success:hover {
+    background-color: color-mix(in srgb, var(--primary-accent) 85%, black); /* Darken on hover */
+    border-color: color-mix(in srgb, var(--primary-accent) 85%, black);
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    color: var(--secondary-accent);
+    border-color: var(--secondary-accent);
+}
+.btn-outline-primary:hover {
+    background-color: var(--secondary-accent);
+    color: white;
+}
+
+.btn-outline-secondary {
+    color: var(--text-body);
+    border-color: var(--text-body);
+}
+.btn-outline-secondary:hover {
+    background-color: var(--text-body);
+    color: white;
+}
+
+.btn-outline-danger {
+    color: #dc3545; /* Bootstrap red */
+    border-color: #dc3545;
+}
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Form controls */
+.form-control {
+    border-radius: 0.5rem; /* Match card and button roundness */
+    font-family: var(--font-ui);
+    padding: 0.75rem 1rem;
+}
+
+/* Auth Layout Specifics */
+.login-card {
+    background-color: white;
+    border-radius: 1.5rem; /* More pronounced roundness for the auth card */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); /* Stronger initial shadow for prominence */
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother, bouncier transition */
+}
+
+.login-card:hover {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15); /* More intense shadow on hover */
+    transform: translateY(-5px); /* Lift significantly */
+}
+
+/* Flash Messages */
+.alert {
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Ensure footer is pushed to the bottom */
+footer {
+    margin-top: auto;
+    padding-top: 1.5rem;
+}
+
+/* Added for glow effect color variables */
+:root {
+    --primary-accent-rgb: 255, 171, 145;
+    --secondary-accent-rgb: 176, 196, 222;
+}
+
+/* Apply Lora to definition lists */
+ol li {
+    font-family: var(--font-body); /* Apply Lora */
+    line-height: 1.6; /* Improve readability for body text */
+    margin-bottom: 0.5rem; /* Space out list items */
+}
+
+/* Also apply Lora to example text if it's within a distinct element like <em> or <span> */
+em, .text-muted.small { /* Targeting the example text classes */
+    font-family: var(--font-body);
+}
+
+/* Ensure general paragraph text also uses the body font if needed */
+p {
+    font-family: var(--font-body); /* Keep general paragraphs as Inter or set to Lora if desired */
+    line-height: 1.6;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: transparent !important; /* Make it truly transparent */
+    box-shadow: none !important; /* Remove any default Bootstrap shadow */
+    padding-top: 1.5rem; /* More top padding to lift content */
+    padding-bottom: 1.5rem; /* More bottom padding */
+    position: relative; /* Needed if we add subtle background later */
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+.navbar-brand {
+    font-family: var(--font-heading); /* Apply Lora */
+    font-size: 1.8rem; /* Make it slightly larger */
+    font-weight: 700 !important; /* Ensure it's bold */
+    color: var(--text-heading) !important; /* Use heading color */
+    letter-spacing: -0.05em; /* Slightly tighter for a crisp look */
+    transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: var(--secondary-accent) !important; /* Subtle hover color */
+}
+
+.navbar-nav .nav-link {
+    font-family: var(--font-ui); /* Apply Inter */
+    font-weight: 500; /* Slightly bolder for navigation links */
+    color: var(--text-body) !important; /* Use body text color */
+    padding: 0.5rem 1rem; /* Adjust padding */
+    border-radius: 0.5rem; /* Slight roundness */
+    transition: all 0.2s ease-in-out; /* Smooth transitions */
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active { /* Added .active for current page if you implement it */
+    color: var(--secondary-accent) !important; /* Periwinkle hover */
+    background-color: rgba(var(--secondary-accent-rgb), 0.1); /* Very subtle background on hover */
+    transform: translateY(-1px); /* Subtle lift */
+}
+
+/* Adjustments for the toggler icon on smaller screens */
+.navbar-toggler {
+    border: none !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none !important;
+}
+
+/* Add these rules to your styles.css */
+
+/* Homepage Search Section */
+.search-bar-container {
+    max-width: 800px; /* Make it longer horizontally */
+    width: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+}
+
+.search-bar-container:focus-within { /* When input inside is focused */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.search-input {
+    border: none !important; /* Remove individual input border */
+    padding: 1.25rem 1.5rem; /* More generous padding for a bigger feel */
+    font-size: 1.25rem; /* Larger font size */
+    box-shadow: none !important; /* Ensure no focus outline */
+}
+
+.search-input:focus {
+    box-shadow: none !important; /* Remove Bootstrap's default focus ring */
+    border-color: transparent !important;
+}
+
+.search-button {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    font-size: 1.25rem; /* Match input font size */
+    display: flex; /* For icon alignment */
+    align-items: center;
+    gap: 0.5rem; /* Space between icon and text */
+}
+
+/* Adjustments for the main VocabVault title */
+.container h1.display-2 { /* Target the specific h1 for the homepage */
+    font-size: calc(2rem + 2vw); /* Responsive font size */
+    line-height: 1.1;
+    margin-bottom: 0.5rem !important; /* Reduce space after title */
+}
+
+/* New tagline style */
+p.lead {
+    font-family: var(--font-body); /* Ensure Lora for the tagline */
+    font-size: 1.3rem;
+    color: var(--text-body);
+    opacity: 0.8; /* Slightly muted */
+}
+
+/* Override Bootstrap's me-2 which creates unwanted space between input and button */
+.me-2 {
+    margin-right: 0 !important;
+}
+
+/* Word Result Card */
+.word-result-card {
+    background-color: white;
+    padding: 2.5rem !important; /* More generous padding inside the card */
+    border-radius: 1.5rem; /* More rounded corners for main content card */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Stronger initial shadow */
+}
+
+.word-result-card h2 {
+    color: var(--text-heading); /* Using var(--text-heading) for consistency with other main titles */
+    font-size: 2.5rem; /* Larger word title */
+    margin-bottom: 2.5rem !important; /* More space after the main word */
+    letter-spacing: -0.04em; /* Tighter letter spacing for this prominent title */
+}
+
+.definition-section {
+    position: relative;
+    padding-bottom: 1rem; /* Space below each part of speech section */
+}
+
+.definition-section h5 {
+    font-family: var(--font-heading); /* Lora for part of speech headings */
+    color: var(--text-heading); /* Use periwinkle for part of speech */
+    font-size: 1.25rem;
+    position: relative;
+    padding-bottom: 0.5rem; /* Space for the underline */
+    margin-bottom: 1.5rem !important; /* Space between heading and definitions */
+}
+
+.definition-section h5::after { /* Subtle underline for part of speech */
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 60px; /* Short underline */
+    height: 3px;
+    background-color: var(--primary-accent); /* Coral color */
+    border-radius: 2px;
+}
+
+.definition-list {
+    padding-left: 0; /* Remove default padding from ul/ol */
+}
+
+.definition-list li {
+    font-family: var(--font-body); /* Inter for definitions */
+    color: var(--text-body);
+    font-size: 1.05rem; /* Slightly larger definition text */
+    padding-left: 0;
+    border-bottom: 1px solid var(--border-subtle);
+    line-height: 1.6; /* For better readability */
+}
+
+.definition-list li:last-child {
+    border-bottom: none; /* No border for the last item in each list (visible or collapsed) */
+}
+
+.definition-text {
+    font-weight: 500; /* Slightly bolder for clarity */
+    margin-bottom: 0.25rem; /* Less space below definition, more for example */
+}
+
+.example-text {
+    font-family: var(--font-body); /* Ensure example text uses Inter */
+    font-style: italic;
+    color: var(--text-muted-dark) !important;
+    font-size: 0.95rem; /* Slightly smaller example text */
+    margin-top: 0.5rem; /* Space above example */
+}
+
+/* Toggle Button for Definitions */
+.toggle-defs-btn {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--secondary-accent) !important; /* Use periwinkle */
+    border-color: var(--secondary-accent) !important;
+    padding: 0.6rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.toggle-defs-btn:hover {
+    background-color: var(--secondary-accent) !important;
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+/* Bootstrap Collapse states for button text and icon */
+/* By default, show "View More" and hide "Show Less" */
+.toggle-defs-btn .expanded-text {
+    display: none; /* Hide 'Show Less' by default */
+}
+.toggle-defs-btn .collapsed-text {
+    display: inline-flex; /* Show 'View More' by default, with icon */
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* When the button IS NOT collapsed (i.e., expanded), swap them */
+.toggle-defs-btn:not(.collapsed) .expanded-text {
+    display: inline-flex; /* Show 'Show Less' */
+}
+.toggle-defs-btn:not(.collapsed) .collapsed-text {
+    display: none; /* Hide 'View More' */
+}
+
+/* Save Form Section within Word Result Card */
+.word-result-card form {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 2rem;
+    margin-top: 2rem !important; /* Ensure it overrides default Bootstrap margin */
+}
+
+.word-result-card form .form-label {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+}
+
+.word-result-card form .form-select {
+    border-radius: 0.5rem;
+    font-family: var(--font-ui);
+    padding: 0.75rem 1rem;
+    border-color: var(--border-subtle);
+}
+.word-result-card form .form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--secondary-accent-rgb), 0.25);
+    border-color: var(--secondary-accent);
+}
+
+/* Add these new styles to your styles.css */
+
+/* Folder Card Specifics */
+.folder-card {
+    background-color: white;
+    border-radius: 1.25rem; /* Slightly more rounded than general cards */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); /* Good, noticeable shadow */
+    transition: all 0.3s ease-in-out; /* Smooth hover */
+}
+
+.folder-card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+    transform: translateY(-3px); /* Stronger lift on hover */
+}
+
+.folder-card .card-body {
+    padding: 1.75rem; /* Generous padding inside folder card */
+}
+
+.folder-link {
+    display: block; /* Ensure the whole card is clickable via the link */
+    height: 100%; /* Make the link fill the card */
+}
+
+.folder-link .card-title {
+    font-family: var(--font-heading); /* Lora for folder name */
+    font-size: 1.35rem; /* Slightly larger folder name */
+    font-weight: 600; /* Bold folder name */
+    color: var(--text-heading); /* Dark color for name */
+    transition: color 0.3s ease;
+    display: flex; /* For icon alignment */
+    align-items: center;
+}
+
+.folder-link:hover .card-title {
+    color: var(--font-heading); /* Periwinkle on hover */
+}
+
+.folder-icon {
+    font-size: 1.5rem; /* Larger folder icon */
+    color: var(--primary-accent); /* Use coral for the folder icon itself */
+    margin-right: 0.75rem !important; /* More space between icon and text */
+    transition: transform 0.2s ease; /* For subtle icon bounce on hover */
+}
+
+.folder-link:hover .folder-icon {
+    transform: scale(1.08); /* Subtle grow effect on folder icon */
+}
+
+.folder-card .card-text {
+    font-family: var(--font-ui); /* Inter for details like word count */
+    font-size: 0.9rem; /* Slightly smaller text for details */
+    color: var(--text-muted-dark) !important; /* Darker muted text */
+}
+
+/* Action Icons (Rename/Delete) */
+.folder-actions {
+    background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent white background for action buttons container */
+    border-radius: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    backdrop-filter: blur(5px); /* Modern frosted glass effect */
+    border: 1px solid rgba(var(--border-subtle-rgb), 0.5); /* Very subtle border */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Light shadow for float effect */
+}
+
+.btn-icon {
+    background-color: transparent !important;
+    border: none !important; /* No border for the icon buttons */
+    padding: 0.4rem; /* Smaller padding for icon buttons */
+    font-size: 1.15rem; /* Size of the icon */
+    color: var(--text-body); /* Default icon color */
+    transition: all 0.2s ease-in-out;
+    border-radius: 0.5rem; /* Slight roundness */
+    display: flex; /* Ensure centering of icon */
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background-color: rgba(var(--secondary-accent-rgb), 0.1); /* Subtle periwinkle background on hover */
+    color: var(--secondary-accent); /* Periwinkle icon on hover */
+    transform: translateY(-1px);
+}
+
+.btn-icon.delete-folder-btn {
+    color: #ff8f9a; /* Bootstrap red for delete icon */
+}
+
+.btn-icon.delete-folder-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1); /* Lighter red background */
+    color: #dc3545; /* Keep red icon */
+}
+
+/* Ensure RGB variables are available for rgba() in CSS */
+:root {
+    /* ... existing RGB variables ... */
+    --border-subtle-rgb: 238, 238, 238; /* For the folder actions subtle border */
+}
+
+/* Adjustments for the Rename Folder Modal */
+.modal-content {
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.modal-header {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 1.5rem;
+}
+.modal-title {
+    font-family: var(--font-heading);
+    color: var(--text-heading);
+    font-weight: 600;
+}
+.modal-body {
+    padding: 1.5rem;
+}
+.modal-footer {
+    border-top: 1px solid var(--border-subtle);
+    padding: 1.5rem;
+}
+
+/* Word Entry Card (in folder.html) */
+.word-entry-card {
+    background-color: white;
+    padding: 1.5rem !important; /* Slightly less padding than main search result card */
+    border-radius: 1.25rem; /* Consistent rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); /* Lighter shadow than main result card */
+    transition: all 0.3s ease-in-out;
+}
+
+.word-entry-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.word-entry-card .card-title {
+    font-family: var(--font-heading); /* Lora for the word title */
+    font-size: 1.6rem; /* Good size for the word itself */
+    font-weight: 600;
+    color: var(--text-heading);
+    letter-spacing: -0.03em; /* Slightly tighter */
+}
+
+.btn-icon.delete-word-btn {
+    color: #ff8f9a; /* Ensure red color */
+}
+
+.btn-icon.delete-word-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1); /* Lighter red background */
+    color: #dc3545; /* Keep red icon */
+}
+
+.definition-section h6 { /* Target h6 specifically for folder.html word cards */
+    font-family: var(--font-heading); /* Lora */
+    color: var(--text-heading); /* Use periwinkle for h6 for subtle distinction */
+    font-size: 1.1rem;
+    position: relative;
+    padding-bottom: 0.4rem; /* Adjust padding for underline */
+    margin-bottom: 1.25rem !important; /* Adjust margin */
+}
+
+.definition-section h6::after { /* Underline for h6 */
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px; /* Shorter underline for sub-headings */
+    height: 2px;
+    background-color: var(--primary-accent);
+    border-radius: 1px;
+}
+
+/* Adjustments for the "Added on" date */
+.word-entry-card .card-text.small {
+    font-family: var(--font-ui);
+    color: var(--text-muted-dark);
+}
+
+.toggle-word-defs-btn {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0.4rem;
+    font-size: 1.15rem;
+    color: var(--text-body);
+    transition: all 0.2s ease-in-out;
+    border-radius: 50%; /* Make it circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-word-defs-btn:hover {
+    background-color: rgba(var(--secondary-accent-rgb), 0.1);
+    color: var(--secondary-accent);
+    transform: translateY(-1px);
+}
+
+/* Icon states for primary toggle button */
+.toggle-word-defs-btn .expanded-icon {
+    display: none; /* Hide up arrow by default */
+}
+.toggle-word-defs-btn .collapsed-icon {
+    display: block; /* Show down arrow by default */
+}
+
+/* When the button IS NOT collapsed (i.e., expanded), swap icons */
+.toggle-word-defs-btn:not(.collapsed) .expanded-icon {
+    display: block; /* Show up arrow */
+}
+.toggle-word-defs-btn:not(.collapsed) .collapsed-icon {
+    display: none; /* Hide down arrow */
+}
+/* Re-confirm/Adjust: Bootstrap Collapse states for secondary toggle button text and icon */
+/* This ensures the "View More/Show Less" button works correctly */
+.toggle-defs-btn .expanded-text {
+    display: none; /* Hide 'Show Less' by default */
+}
+.toggle-defs-btn .collapsed-text {
+    display: inline-flex; /* Show 'View More' by default, with icon */
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* When the button IS NOT collapsed (i.e., expanded), swap them */
+.toggle-defs-btn:not(.collapsed) .expanded-text {
+    display: inline-flex; /* Show 'Show Less' */
+}
+.toggle-defs-btn:not(.collapsed) .collapsed-text {
+    display: none; /* Hide 'View More' */
+}
+
+.alert {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More prominent shadow */
+    border: 1px solid var(--alert-border-color); /* Custom border */
+    font-family: var(--font-ui); /* Ensure Inter font */
+    font-weight: 500; /* Slightly bolder text */
+    padding: 1rem 1.5rem; /* More comfortable padding */
+    opacity: 0; /* Start invisible for animation */
+    animation: fadeInPop 0.5s ease-out forwards; /* Apply entrance animation */
+    margin-bottom: 1rem; /* Space between alerts if multiple */
+}
+
+/* Custom colors for alert-warning (Flash messages use alert-warning by default) */
+.alert-warning {
+    background-color: rgba(176, 196, 222, 0.4); /* Adjusted for 60% opacity (40% transparent) */
+    color: var(--alert-text-color);
+}
+
+/* Style the close button inside the alert */
+.alert .btn-close {
+    filter: var(--alert-close-filter); /* Apply the filter for a blue tint */
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.alert .btn-close:hover {
+    opacity: 1;
+}
+
+/* Keyframes for the "popping" entrance animation */
+@keyframes fadeInPop {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    70% {
+        opacity: 1;
+        transform: translateY(-5px) scale(1.02); /* Slight overshoot for pop effect */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Keyframes for the graceful fade-out animation */
+@keyframes fadeOutDismiss {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 200px; /* Max height to allow collapse */
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+    70% {
+        opacity: 0;
+        transform: translateY(-20px);
+        max-height: 200px;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+        max-height: 0; /* Collapse height after fade */
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        overflow: hidden; /* Hide content during collapse */
+        border: none; /* Remove border during collapse */
+    }
+}
+
+@keyframes vocabVaultEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.8) rotateX(-90deg); /* Start hidden, slightly lower, smaller, rotated */
+        text-shadow: 0 0 0 rgba(var(--secondary-accent-rgb), 0), 0 0 0 rgba(var(--primary-accent-rgb), 0); /* No glow initially */
+    }
+    60% { /* Mid-point for slight overshoot and glow start */
+        opacity: 1;
+        transform: translateY(-10px) scale(1.05) rotateX(10deg);
+        text-shadow: 0 0 10px rgba(var(--secondary-accent-rgb), 0.3), 0 0 25px rgba(var(--primary-accent-rgb), 0.2);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg); /* Settle at final state */
+        text-shadow: 0 0 8px rgba(var(--secondary-accent-rgb), 0.6), 0 0 20px rgba(var(--primary-accent-rgb), 0.4); /* Final glow */
+    }
+}
+
+/* Subtle continuous pulse for the glow effect */
+@keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 8px rgba(var(--secondary-accent-rgb), 0.6), 0 0 20px rgba(var(--primary-accent-rgb), 0.4); }
+    50% { text-shadow: 0 0 12px rgba(var(--secondary-accent-rgb), 0.8), 0 0 30px rgba(var(--primary-accent-rgb), 0.6); }
+}
+
+/* Glow effect for VocabVault title */
+h1.glow,h2 glow {
+    /* Define base final state for properties not animated to ensure consistency */
+    opacity: 1; /* Default to visible if animations fail */
+    transform: none; /* Default to no transform if animations fail */
+    text-shadow: 0 0 8px rgba(var(--secondary-accent-rgb), 0.6), 0 0 20px rgba(var(--primary-accent-rgb), 0.4); /* Default glow */
+
+    /* Apply the entrance animation first, then the continuous pulse after a delay */
+    /* vocabVaultEntrance: 1.5s duration, springy easing, stays at end state */
+    /* glowPulse: 3s duration, smooth easing, infinite loop, starts 1.5s after page load (after entrance) */
+    animation: vocabVaultEntrance 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
+               glowPulse 3s ease-in-out infinite 1.5s;
+}

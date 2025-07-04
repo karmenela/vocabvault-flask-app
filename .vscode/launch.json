@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Flask (Auto Reload)",
+        "type": "python",
+        "request": "launch",
+        "module": "flask",
+        "args": [
+          "--app=app.py",
+          "--debug",
+          "run"
+        ],
+        "jinja": true,
+        "justMyCode": false
+      }
+    ]
+  }
+  
