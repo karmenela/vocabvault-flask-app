@@ -1,5 +1,5 @@
 # 🗝 VocabVault: Your personal vault of words
-#### Video Demo:  <URL HERE>
+#### Video Demo:  <https://youtu.be/01unCEzwO5M>
 ## Description:
 
 **VocabVault** VocabVault is a dynamic web application designed to help users expand and organize their vocabulary. It serves as a smart dictionary where users can look up words, view their definitions and relevant examples, and then save these words into personalized folders for later review. This project was developed as the final project for CS50x, Harvard University's Introduction to Computer Science, demonstrating proficiency in web development principles, database management, and API integration.
