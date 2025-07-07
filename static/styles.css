@@ -750,3 +750,16 @@ h1.glow,h2 glow {
     animation: vocabVaultEntrance 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
                glowPulse 3s ease-in-out infinite 1.5s;
 }
+
+.profile-icon {
+    font-size: 1.8em; /* Adjust size as needed */
+    color: #007bff; /* Example color, matches Bootstrap primary blue. Adjust to your theme. */
+    cursor: default; /* Change cursor to default, as it's not clickable */
+    padding-top: 5px; /* Adjust vertical alignment if needed */
+    padding-bottom: 5px; /* Adjust vertical alignment if needed */
+}
+
+/* Optional: If you want a slightly different hover effect (e.g., color change) */
+.profile-icon:hover {
+    color: #0056b3; /* Darker blue on hover */
+}

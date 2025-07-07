@@ -31,6 +31,15 @@ def get_db():
     conn.row_factory = sqlite3.Row  # enables name-based access
     return conn
 
+def get_current_user():
+    user_id = session.get("user_id")
+    if user_id:
+        db = get_db()
+        user = db.execute("SELECT id, username FROM users WHERE id = ?", (user_id,)).fetchone()
+        db.close()
+        return user
+    return None
+
 @app.template_filter("loads")
 def json_loads_filter(s):
     return json.loads(s)
@@ -104,6 +113,8 @@ def logout():
 def index():
     if not session.get("user_id"):
         return redirect("/login")
+    
+    current_user = get_current_user()
 
     db = get_db()
     folders = db.execute("""
@@ -120,16 +131,18 @@ def index():
         word = request.form.get("word")
         # (You can add logic to look up the word here if needed)
         db.close()
-        return render_template("index.html", folders=folders, word=word)
+        return render_template("index.html", folders=folders, word=word, current_user=current_user)
 
     db.close()
-    return render_template("index.html", folders=folders)
+    return render_template("index.html", folders=folders, current_user=current_user)
 
 
 @app.route("/search", methods=["POST"])
 def search():
     if not session.get("user_id"):
         return redirect("/login")
+    
+    current_user = get_current_user()
 
     word = request.form.get("word")
     if not word:
@@ -179,7 +192,7 @@ def search():
     """, (session["user_id"],)).fetchall()
     db.close()
 
-    return render_template("index.html", result=result, folders=folders)
+    return render_template("index.html", result=result, folders=folders, current_user=current_user)
 
 @app.route("/add-folder", methods=["POST"])
 def add_folder():
@@ -205,6 +218,8 @@ def add_folder():
 def folder(folder_id):
     if not session.get("user_id"):
         return redirect("/login")
+    
+    current_user = get_current_user()
 
     db = get_db()
 
@@ -231,7 +246,7 @@ def folder(folder_id):
         })
 
     db.close()
-    return render_template("folder.html", folder=folder, words=processed_words)
+    return render_template("folder.html", folder=folder, words=processed_words, current_user=current_user)
 
 @app.route("/save", methods=["POST"])
 def save_word():
