@@ -6,6 +6,7 @@ from flask import Flask, render_template, redirect, url_for, request, session, f
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv 
+from cs50 import submit50
 
 load_dotenv()
 
